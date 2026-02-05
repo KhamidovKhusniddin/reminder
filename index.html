@@ -11,41 +11,41 @@
     <script src="words_data.js"></script>
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-glow: rgba(99, 102, 241, 0.5);
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.4);
             --secondary: #ec4899;
-            --secondary-glow: rgba(236, 72, 153, 0.4);
+            --secondary-glow: rgba(236, 72, 153, 0.3);
             --accent: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --background: #0f172a;
-            --surface: #1e293b;
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass: rgba(255, 255, 255, 0.03);
+            --background: #030712;
+            --surface: #111827;
+            --text: #f9fafb;
+            --text-muted: #9ca3af;
+            --glass: rgba(255, 255, 255, 0.04);
             --glass-hover: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --card-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.7);
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         [data-theme="ocean"] {
-            --primary: #0ea5e9;
-            --primary-glow: rgba(14, 165, 233, 0.5);
-            --background: #0c4a6e;
-            --surface: #075985;
+            --primary: #06b6d4;
+            --primary-glow: rgba(6, 182, 212, 0.4);
+            --background: #083344;
+            --surface: #155e75;
         }
 
         [data-theme="forest"] {
-            --primary: #22c55e;
-            --primary-glow: rgba(34, 197, 94, 0.5);
+            --primary: #10b981;
+            --primary-glow: rgba(16, 185, 129, 0.4);
             --background: #064e3b;
             --surface: #065f46;
         }
 
         [data-theme="purple"] {
-            --primary: #a855f7;
-            --primary-glow: rgba(168, 85, 247, 0.5);
+            --primary: #d946ef;
+            --primary-glow: rgba(217, 70, 239, 0.4);
             --background: #2e1065;
             --surface: #4c1d95;
         }
@@ -60,156 +60,197 @@
         }
 
         *::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         *::-webkit-scrollbar-thumb {
-            background-color: var(--primary);
+            background: linear-gradient(var(--primary), var(--secondary));
             border-radius: 20px;
         }
 
         body {
             background-color: var(--background);
             background-image:
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.2) 0px, transparent 40%),
+                radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 40%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 40%),
+                radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 40%);
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
             transition: var(--transition);
+            display: flex;
         }
 
         .app-container {
             display: flex;
+            width: 100%;
             min-height: 100vh;
         }
 
         /* Sidebar */
         aside {
-            width: 280px;
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            width: 300px;
+            background: rgba(3, 7, 18, 0.7);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             border-right: 1px solid var(--glass-border);
-            padding: 2.5rem 1.5rem;
+            padding: 3rem 2rem;
             position: fixed;
             height: 100vh;
             z-index: 100;
+            display: flex;
+            flex-direction: column;
             transition: var(--transition);
         }
 
         .logo {
-            font-size: 1.85rem;
-            font-weight: 900;
-            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1.5px;
-            margin-bottom: 3.5rem;
+            font-size: 2rem;
+            font-weight: 1000;
+            margin-bottom: 4rem;
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 1rem;
+            color: white;
+            text-shadow: 0 0 20px var(--primary-glow);
         }
 
         .logo i {
-            filter: drop-shadow(0 0 10px var(--primary-glow));
-            -webkit-text-fill-color: var(--primary);
+            color: var(--primary);
+            font-size: 2.2rem;
+            animation: pulse-glow 3s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from {
+                filter: drop-shadow(0 0 5px var(--primary-glow));
+            }
+
+            to {
+                filter: drop-shadow(0 0 20px var(--primary));
+            }
         }
 
         .nav-links {
             list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
-        .nav-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .nav-links a {
+        .nav-links li a {
             color: var(--text-muted);
             text-decoration: none;
-            padding: 1.1rem;
-            border-radius: 16px;
+            padding: 1.25rem 1.5rem;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 1rem;
-            font-weight: 600;
+            gap: 1.2rem;
+            font-weight: 700;
+            font-size: 1.05rem;
             transition: var(--transition);
-            cursor: pointer;
             border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
         }
 
-        .nav-links a:hover {
-            background: var(--glass);
-            color: var(--text);
-            transform: translateX(8px);
-            border-color: var(--glass-border);
+        .nav-links li a:hover {
+            color: white;
+            background: var(--glass-hover);
+            transform: translateX(10px);
         }
 
-        .nav-links a.active {
+        .nav-links li a.active {
             background: linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%);
             color: white;
-            box-shadow: 0 10px 25px -5px var(--primary-glow);
+            box-shadow: 0 15px 35px -10px var(--primary-glow);
+            transform: scale(1.05);
             border-color: rgba(255, 255, 255, 0.2);
         }
 
-        .nav-links a i {
-            font-size: 1.2rem;
+        .nav-links li a i {
+            font-size: 1.4rem;
             width: 24px;
-            text-align: center;
         }
 
         /* Main Content */
         main {
             flex: 1;
-            margin-left: 280px;
-            padding: 3rem;
-            max-width: 1400px;
-            transition: var(--transition);
+            margin-left: 300px;
+            padding: 4rem;
+            max-width: 1600px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .view {
             display: none;
-            opacity: 0;
-            transform: translateY(20px) scale(0.98);
+            width: 100%;
+            height: 100%;
         }
 
         .view.active {
-            display: block;
-            animation: view-enter 0.5s forwards cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            animation: view-fade-in 0.8s forwards cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        @keyframes view-enter {
+        @keyframes view-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.98);
+                filter: blur(10px);
+            }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
+                filter: blur(0);
             }
         }
 
         .glass-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 2.2rem;
+            border-radius: 35px;
+            padding: 2.5rem;
             box-shadow: var(--card-shadow);
             margin-bottom: 2rem;
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: 0.5s;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
         }
 
         .glass-card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.25);
             background: var(--glass-hover);
         }
 
         h1 {
-            font-size: 2.8rem;
-            font-weight: 900;
-            margin-bottom: 2.5rem;
-            letter-spacing: -1.5px;
-            background: linear-gradient(to right, #fff, var(--text-muted));
+            font-size: 3.5rem;
+            font-weight: 1000;
+            margin-bottom: 3rem;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -457,13 +498,21 @@
             background: var(--danger);
         }
 
-        /* Flashcard Component */
+        /* Flashcard Premium Design */
+        .flashcard-view-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 3rem;
+        }
+
         .flashcard-container {
-            perspective: 1000px;
+            perspective: 2000px;
             width: 100%;
-            max-width: 600px;
-            height: 400px;
-            margin: 0 auto;
+            max-width: 650px;
+            height: 450px;
             cursor: pointer;
         }
 
@@ -472,7 +521,7 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .flashcard.flipped {
@@ -488,29 +537,33 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 3rem;
+            padding: 4rem;
             text-align: center;
-            border-radius: 32px;
-            background: var(--glass);
+            border-radius: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
             border: 2px solid var(--glass-border);
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
         }
 
         .flashcard-back {
             transform: rotateY(180deg);
-            background: linear-gradient(135deg, var(--surface) 0%, var(--background) 100%);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(3, 7, 18, 0.9) 100%);
         }
 
         .flashcard h2 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
+            font-size: 4.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
             color: white;
+            letter-spacing: -2px;
         }
 
         .flashcard p {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             color: var(--text-muted);
             line-height: 1.6;
+            max-width: 80%;
         }
 
         /* Game UI */
@@ -832,11 +885,12 @@
         <!-- Mobile Bottom Nav -->
         <div class="mobile-nav">
             <a onclick="showView('dashboard')" id="m-nav-dashboard" class="active"><i
-                    class="fas fa-grid-2"></i><span>Dash</span></a>
-            <a onclick="showView('flashcards')" id="m-nav-flashcards"><i class="fas fa-clone"></i><span>Cards</span></a>
-            <a onclick="showView('game')" id="m-nav-game"><i class="fas fa-gamepad"></i><span>Play</span></a>
-            <a onclick="showView('words')" id="m-nav-words"><i class="fas fa-list"></i><span>Words</span></a>
-            <a onclick="showView('settings')" id="m-nav-settings"><i class="fas fa-cog"></i><span>Set</span></a>
+                    class="fas fa-home"></i><span>Bosh</span></a>
+            <a onclick="showView('flashcards')" id="m-nav-flashcards"><i
+                    class="fas fa-clone"></i><span>Kartalar</span></a>
+            <a onclick="showView('game')" id="m-nav-game"><i class="fas fa-play"></i><span>O'yin</span></a>
+            <a onclick="showView('words')" id="m-nav-words"><i class="fas fa-list"></i><span>Lug'at</span></a>
+            <a onclick="showView('settings')" id="m-nav-settings"><i class="fas fa-cog"></i><span>Soz</span></a>
         </div>
 
         <main>
@@ -911,51 +965,69 @@
                         </div>
                     </div>
                     <div class="glass-card"
-                        style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <h2 style="margin-bottom: 2rem;">Mastery</h2>
-                        <div class="progress-circle" id="mastery-circle" style="--percent: 0">
-                            <span>0%</span>
+                        style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 250px;">
+                        <h2 style="margin-bottom: 2rem; font-size: 1.4rem;">Mastery</h2>
+                        <div class="progress-circle" id="mastery-circle"
+                            style="--percent: 0; width: 140px; height: 140px;">
+                            <span style="font-size: 2rem;">0%</span>
                         </div>
-                        <p style="margin-top: 1.5rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">
-                            Siz bugungi rejaning <span id="mastery-text">0%</span> qismini bajardingiz!</p>
+                        <p style="margin-top: 1.5rem; text-align: center; color: var(--text-muted); font-size: 1rem;">
+                            Sizning umumiy progressivlik darajangiz: <span id="mastery-text"
+                                style="color: var(--primary); font-weight: 800;">0%</span></p>
                     </div>
                 </div>
 
-                <h2 style="margin-top: 3rem;"><i class="fas fa-layer-group"></i> Unitlar bo'yicha o'rganish</h2>
-                <div class="units-grid" id="units-container"
-                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                    <!-- Unitlar bu yerga injektsiya qilinadi -->
+                <h2 style="margin-top: 4rem; font-size: 2rem; font-weight: 900;"><i class="fas fa-star"
+                        style="color: var(--warning);"></i> Unitlar bo'yicha mashq</h2>
+                <div id="units-container" class="units-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <!-- Units injected here -->
                 </div>
             </div>
     </div>
 
     <!-- Flashcards View -->
     <div id="view-flashcards" class="view">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
             <h1>Flashcards</h1>
-            <div style="display: flex; gap: 1rem;">
+            <div style="display: flex; gap: 1.5rem; align-items: center;">
                 <span id="card-counter"
-                    style="background: var(--glass); padding: 0.5rem 1rem; border-radius: 12px; font-weight: 700;">1
+                    style="background: var(--glass); padding: 0.8rem 1.5rem; border-radius: 20px; font-weight: 800; font-size: 1.1rem; border: 1px solid var(--glass-border);">1
                     / 10</span>
+                <button class="btn btn-secondary" onclick="appState.currentUnit=null; initApp(); showView('dashboard')">
+                    <i class="fas fa-times"></i> Yopish
+                </button>
             </div>
         </div>
 
-        <div class="flashcard-container" onclick="flipCard()">
-            <div class="flashcard" id="active-card">
-                <div class="flashcard-face">
-                    <i class="fas fa-volume-up" onclick="speakText(event)"
-                        style="position: absolute; top: 2rem; right: 2rem; font-size: 1.5rem; color: var(--primary);"></i>
-                    <h2 id="card-front-text">Apple</h2>
-                    <p>Inglizcha so'z</p>
-                    <small style="margin-top: 2rem; color: var(--primary);">Bosing va tarjimasini
-                        ko'ring</small>
-                </div>
-                <div class="flashcard-face flashcard-back">
-                    <h2 id="card-back-text">Olma</h2>
-                    <p id="card-def-text">A round fruit with red or green skin and a whitish inside.</p>
-                    <div style="display: flex; gap: 1rem; margin-top: 2.5rem;">
-                        <button class="btn btn-secondary" onclick="nextCard(event, false)">Bilmayman</button>
-                        <button class="btn btn-primary" onclick="nextCard(event, true)">Bilaman</button>
+        <div class="flashcard-view-container">
+            <div class="flashcard-container" onclick="flipCard()">
+                <div class="flashcard" id="active-card">
+                    <div class="flashcard-face">
+                        <i class="fas fa-volume-up" onclick="speakText(event)"
+                            style="position: absolute; top: 3rem; right: 3rem; font-size: 2rem; color: var(--primary); opacity: 0.6; transition: 0.3s; cursor: pointer;"></i>
+                        <h2 id="card-front-text">Yuklanmoqda...</h2>
+                        <p id="card-type-text"
+                            style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 1rem; letter-spacing: 3px; margin-top: 1rem;">
+                            Inglizcha so'z</p>
+                        <div
+                            style="margin-top: 4rem; padding: 1rem 2rem; background: var(--glass); border-radius: 20px; font-size: 0.9rem; color: var(--text-muted);">
+                            Bosing va tarjimasini ko'ring
+                        </div>
+                    </div>
+                    <div class="flashcard-face flashcard-back">
+                        <h2 id="card-back-text">Tarjima</h2>
+                        <p id="card-def-text" style="margin-bottom: 3rem;">Tavsif yuklanmoqda...</p>
+                        <div style="display: flex; gap: 1.5rem;">
+                            <button class="btn btn-secondary" style="padding: 1.2rem 2.5rem; font-size: 1.1rem;"
+                                onclick="nextCard(event, false)">
+                                <i class="fas fa-times-circle"></i> Bilmayman
+                            </button>
+                            <button class="btn btn-primary" style="padding: 1.2rem 2.5rem; font-size: 1.1rem;"
+                                onclick="nextCard(event, true)">
+                                <i class="fas fa-check-circle"></i> Bilaman
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -964,22 +1036,24 @@
 
     <!-- Game View -->
     <div id="view-game" class="view">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
             <h1>Game Mode</h1>
-            <div style="display: flex; gap: 1.5rem;">
-                <span class="glass-card"
-                    style="margin:0; padding: 0.6rem 1.2rem; display: flex; gap: 0.8rem; font-weight: 700; color: var(--warning);">
-                    <i class="fas fa-gem"></i> <span id="game-xp">0</span>
-                </span>
-                <span class="glass-card"
-                    style="margin:0; padding: 0.6rem 1.2rem; display: flex; gap: 0.8rem; font-weight: 700; color: var(--secondary);">
-                    <i class="fas fa-fire"></i> <span id="game-streak-val">0</span>x
-                </span>
+            <div style="display: flex; gap: 1.5rem; align-items: center;">
+                <div class="glass-card"
+                    style="margin:0; padding: 0.8rem 1.5rem; display: flex; gap: 1rem; font-weight: 800; color: var(--warning); border: 1px solid var(--glass-border);">
+                    <i class="fas fa-crown"></i> <span id="game-xp">0</span> XP
+                </div>
+                <button class="btn btn-secondary" onclick="appState.currentUnit=null; initApp(); showView('dashboard')">
+                    <i class="fas fa-times"></i> To'xtatish
+                </button>
             </div>
         </div>
 
-        <div class="glass-card" id="game-box" style="min-height: 450px; position: relative;">
-            <!-- Game content injected here -->
+        <div class="flashcard-view-container">
+            <div class="glass-card" id="game-box"
+                style="width: 100%; max-width: 800px; min-height: 500px; padding: 4rem; display: flex; flex-direction: column; justify-content: center;">
+                <!-- Game content -->
+            </div>
         </div>
     </div>
 
@@ -1136,10 +1210,10 @@
             checkStreak();
             renderUnits();
 
-            // Notification Loop
-            setInterval(() => {
-                if (Math.random() > 0.7) showToast('Eslatma', 'Yangi so\'zlarni takrorlash vaqti bo\'ldi!');
-            }, 6000000);
+            // First time load check
+            if (appState.words.length > 0 && learnSession.length === 0) {
+                learnSession = [...appState.words];
+            }
         }
 
         function renderUnits() {
@@ -1147,17 +1221,20 @@
             if (!container || typeof ALL_UNITS === 'undefined') return;
 
             container.innerHTML = ALL_UNITS.map(unit => `
-                <div class="glass-card" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">${unit.name}</h3>
-                        <span style="background: var(--glass); padding: 0.3rem 0.6rem; border-radius: 8px; font-size: 0.8rem;">${unit.words.length} ta so'z</span>
+                <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; justify-content: space-between;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                            <span style="background: var(--primary-glow); color: var(--primary); padding: 0.4rem 1rem; border-radius: 12px; font-size: 0.8rem; font-weight: 900; letter-spacing: 1px;">${unit.id}</span>
+                            <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 700;">${unit.words.length} so'z</span>
+                        </div>
+                        <h3 style="font-size: 1.4rem; font-weight: 900; line-height: 1.4; color: white;">${unit.name}</h3>
                     </div>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
-                        <button class="btn btn-secondary" style="flex: 1; font-size: 0.8rem; padding: 0.6rem;" onclick="startUnitStudy('${unit.id}', 'flashcards')">
-                            <i class="fas fa-clone"></i> Kartalar
+                    <div style="display: flex; gap: 0.8rem;">
+                        <button class="btn btn-secondary" style="flex: 1.2; font-size: 0.9rem; border-radius: 18px;" onclick="startUnitStudy('${unit.id}', 'flashcards')">
+                            <i class="fas fa-book-open"></i> Kartalar
                         </button>
-                        <button class="btn btn-primary" style="flex: 1; font-size: 0.8rem; padding: 0.6rem;" onclick="startUnitStudy('${unit.id}', 'game')">
-                            <i class="fas fa-gamepad"></i> Test
+                        <button class="btn btn-primary" style="flex: 1; font-size: 0.9rem; border-radius: 18px;" onclick="startUnitStudy('${unit.id}', 'game')">
+                            <i class="fas fa-bolt"></i> Test
                         </button>
                     </div>
                 </div>
@@ -1253,10 +1330,12 @@
         }
 
         function updateCard() {
+            if (learnSession.length === 0) return;
             const card = learnSession[cardIndex];
             document.getElementById('card-front-text').innerText = card.word;
             document.getElementById('card-back-text').innerText = card.trans;
             document.getElementById('card-def-text').innerText = card.def || 'Tavsif berilmagan.';
+            document.getElementById('card-type-text').innerText = card.type ? `Part of speech: ${card.type}` : 'Inglizcha so\'z';
             document.getElementById('card-counter').innerText = `${cardIndex + 1} / ${learnSession.length}`;
             document.getElementById('active-card').classList.remove('flipped');
         }
@@ -1315,12 +1394,12 @@
             currentGame = { correct, options };
 
             box.innerHTML = `
-                <div style="text-align: center; padding: 1rem;">
-                    <p style="text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 1rem;">Translate this word:</p>
-                    <h2 style="font-size: 3.5rem; margin-bottom: 3rem;">${correct.word}</h2>
-                    <div class="game-options">
+                <div style="text-align: center;">
+                    <p style="text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 800; font-size: 0.9rem;">Tarjima qiling:</p>
+                    <h2 style="font-size: 4rem; margin-bottom: 4rem; font-weight: 1000; color: white;">${correct.word}</h2>
+                    <div class="game-options" style="grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
                         ${options.map((opt, i) => `
-                            <div class="game-option" onclick="checkGameAnswer(this, ${i})">
+                            <div class="game-option" style="padding: 2rem; font-size: 1.2rem; border-radius: 25px;" onclick="checkGameAnswer(this, ${i})">
                                 ${opt.trans}
                             </div>
                         `).join('')}
