@@ -937,8 +937,11 @@
             }
 
             #writing-input {
-                font-size: 1.2rem;
-                padding: 1.2rem;
+                font-size: 1rem;
+                padding: 1rem;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                text-align: center;
             }
 
             .dashboard-content .glass-card:first-child {
@@ -950,8 +953,46 @@
             }
 
             #game-box {
-                padding: 2rem !important;
-                min-height: 400px !important;
+                padding: 1.5rem !important;
+                min-height: 350px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+
+            .flashcard-view-container {
+                padding: 0 !important;
+                width: 100% !important;
+            }
+
+            /* Stack Game Header on Mobile */
+            #view-game>div:first-child {
+                flex-direction: column !important;
+                gap: 0.5rem !important;
+                margin-bottom: 1rem !important;
+                align-items: center !important;
+            }
+
+            #view-game>div:first-child h1 {
+                font-size: 1.5rem !important;
+                margin-bottom: 0.5rem !important;
+                width: 100%;
+                text-align: center;
+            }
+
+            #view-game>div:first-child>div {
+                justify-content: center;
+                width: 100%;
+            }
+
+            #game-mode-select,
+            #game-xp,
+            button {
+                transform: scale(0.9);
+                margin: 0 !important;
             }
 
             #view-game>div:first-child,
@@ -1838,12 +1879,12 @@
         function renderWritingGame(box, correct) {
             currentGame = { correct, mode: 'writing' };
             box.innerHTML = `
-                <div style="text-align: center; width: 100%;">
-                    <p style="text-transform: uppercase; letter-spacing: 3px; color: var(--text-muted); margin-bottom: 1rem; font-weight: 700; font-size: 0.75rem;">O'zbekchaga tarjima qiling:</p>
-                    <h3 class="game-title">${correct.word}</h3>
-                    <div style="max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem;">
-                        <input type="text" id="writing-input" placeholder="Tarjimani yozing..." autocomplete="off">
-                        <button class="btn btn-primary pro-btn" style="padding: 1rem; font-size: 1rem; border-radius: 16px;" onclick="checkWritingAnswer()">
+                <div style="text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center;">
+                    <p style="text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 0.8rem; font-weight: 700; font-size: 0.7rem;">O'zbekchaga tarjima qiling:</p>
+                    <h3 class="game-title" style="margin-bottom: 1rem;">${correct.word}</h3>
+                    <div style="width: 100%; max-width: 100%; display: flex; flex-direction: column; gap: 0.8rem; align-items: center;">
+                        <input type="text" id="writing-input" placeholder="Tarjimani yozing..." autocomplete="off" style="width: 100%; max-width: 300px; text-align: center;">
+                        <button class="btn btn-primary pro-btn" style="width: 100%; max-width: 300px; padding: 0.8rem; font-size: 1rem; border-radius: 12px;" onclick="checkWritingAnswer()">
                             <i class="fas fa-paper-plane"></i> Tekshirish
                         </button>
                     </div>
