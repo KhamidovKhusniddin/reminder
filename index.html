@@ -600,6 +600,31 @@
             animation: pulse-green 0.5s;
         }
 
+        .game-title {
+            font-size: 4.5rem;
+            margin-bottom: 3rem;
+            font-weight: 1000;
+            color: white;
+            text-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .game-option-text {
+            font-size: 1.35rem;
+            padding: 2.2rem;
+            border-radius: 30px;
+        }
+
+        #writing-input {
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 20px;
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+            width: 100%;
+        }
+
         /* Ultra Pro Enhancements */
         .unit-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
@@ -780,16 +805,30 @@
             main {
                 margin-left: 0;
                 padding: 1.5rem;
-                padding-bottom: 6rem;
+                padding-bottom: 7rem;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .stat-item {
+                padding: 1.5rem;
+            }
+
+            .stat-value {
+                font-size: 2.5rem;
             }
 
             h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
             }
 
             .mobile-nav {
@@ -798,12 +837,13 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                background: rgba(15, 23, 42, 0.9);
+                background: rgba(15, 23, 42, 0.95);
                 backdrop-filter: blur(20px);
                 border-top: 1px solid var(--glass-border);
-                padding: 1rem 0;
+                padding: 0.8rem 0;
                 justify-content: space-around;
                 z-index: 1000;
+                box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
             }
 
             .mobile-nav a {
@@ -812,24 +852,121 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 5px;
-                font-size: 1.2rem;
+                gap: 4px;
+                font-size: 1.1rem;
                 transition: var(--transition);
+                flex: 1;
             }
 
             .mobile-nav a span {
-                font-size: 0.7rem;
+                font-size: 0.65rem;
                 font-weight: 700;
                 text-transform: uppercase;
             }
 
             .mobile-nav a.active {
                 color: var(--primary);
-                transform: translateY(-5px);
             }
 
             .game-options {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .flashcard-container {
+                height: 350px;
+            }
+
+            .flashcard h2 {
+                font-size: 2.5rem;
+            }
+
+            .flashcard-face {
+                padding: 2rem;
+            }
+
+            .stat-item i {
+                font-size: 4rem;
+            }
+
+            .glass-card {
+                padding: 1.5rem;
+                border-radius: 25px;
+            }
+
+            .unit-card {
+                padding: 1.5rem !important;
+            }
+
+            .dashboard-content {
+                gap: 1.5rem;
+            }
+
+            #toast-container {
+                right: 1rem;
+                left: 1rem;
+                bottom: 6rem;
+            }
+
+            .toast {
+                min-width: auto;
+                width: 100%;
+            }
+
+            .game-title {
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .game-option-text {
+                font-size: 1.1rem;
+                padding: 1.5rem;
+                border-radius: 20px;
+            }
+
+            #writing-input {
+                font-size: 1.2rem;
+                padding: 1.2rem;
+            }
+
+            .dashboard-content .glass-card:first-child {
+                overflow-x: auto;
+            }
+
+            .dashboard-content h2 i {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .game-title {
+                font-size: 2rem;
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            main {
+                padding: 1rem;
+                padding-bottom: 7rem;
+            }
+
+            .logo {
+                margin-bottom: 2rem;
+            }
+
+            .btn {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .flashcard h2 {
+                font-size: 2rem;
             }
         }
 
@@ -1216,7 +1353,7 @@
         <div class="glass-card">
             <h2><i class="fas fa-info-circle"></i> Ilova haqida</h2>
             <p style="color: var(--text-muted);">Reminder Pro v2.0 - Premium Edition</p>
-            <p style="color: var(--text-muted); margin-top: 0.5rem;">Coded with ❤️ by Antigravity</p>
+            <p style="color: var(--text-muted); margin-top: 0.5rem;">Coded Khamidov</p>
         </div>
     </div>
     </main>
@@ -1638,10 +1775,10 @@
             box.innerHTML = `
                 <div style="text-align: center;">
                     <p style="text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 800; font-size: 0.9rem;">Tarjima qiling:</p>
-                    <h2 style="font-size: 4.5rem; margin-bottom: 4rem; font-weight: 1000; color: white; text-shadow: 0 0 30px var(--primary-glow);">${correct.word}</h2>
+                    <h2 class="game-title">${correct.word}</h2>
                     <div class="game-options" style="grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
                         ${options.map((opt, i) => `
-                            <div class="game-option unit-card" style="padding: 2.2rem; font-size: 1.35rem; border-radius: 30px; border-width: 1px;" onclick="checkGameAnswer(this, ${i})">
+                            <div class="game-option unit-card game-option-text" style="border-width: 1px;" onclick="checkGameAnswer(this, ${i})">
                                 ${opt.trans}
                             </div>
                         `).join('')}
@@ -1655,11 +1792,9 @@
             box.innerHTML = `
                 <div style="text-align: center; width: 100%;">
                     <p style="text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 800; font-size: 0.9rem;">O'zbekchaga tarjima qiling:</p>
-                    <h2 style="font-size: 4.5rem; margin-bottom: 3rem; font-weight: 1000; color: white; text-shadow: 0 0 30px var(--primary-glow);">${correct.word}</h2>
+                    <h2 class="game-title">${correct.word}</h2>
                     <div style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
-                        <input type="text" id="writing-input" 
-                               style="background: var(--glass); border: 2px solid var(--glass-border); padding: 1.5rem; border-radius: 20px; font-size: 1.5rem; color: white; text-align: center;" 
-                               placeholder="Tarjimani yozing..." autocomplete="off">
+                        <input type="text" id="writing-input" placeholder="Tarjimani yozing..." autocomplete="off">
                         <button class="btn btn-primary pro-btn" style="padding: 1.5rem; font-size: 1.2rem; border-radius: 20px;" onclick="checkWritingAnswer()">
                             <i class="fas fa-paper-plane"></i> Tekshirish
                         </button>
