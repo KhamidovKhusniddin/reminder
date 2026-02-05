@@ -552,18 +552,19 @@
         }
 
         .flashcard h2 {
-            font-size: 4.5rem;
+            font-size: 3.5rem;
             font-weight: 900;
             margin-bottom: 1.5rem;
             color: white;
             letter-spacing: -2px;
+            word-break: break-word;
         }
 
         .flashcard p {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             color: var(--text-muted);
             line-height: 1.6;
-            max-width: 80%;
+            max-width: 90%;
         }
 
         /* Game UI */
@@ -601,11 +602,12 @@
         }
 
         .game-title {
-            font-size: 4.5rem;
-            margin-bottom: 3rem;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
             font-weight: 1000;
             color: white;
             text-shadow: 0 0 30px var(--primary-glow);
+            word-break: break-word;
         }
 
         .game-option-text {
@@ -914,13 +916,15 @@
             }
 
             .game-title {
-                font-size: 2.5rem;
-                margin-bottom: 2rem;
+                font-size: 2.2rem;
+                margin-bottom: 1.5rem;
+                word-break: break-word;
+                line-height: 1.2;
             }
 
             .game-option-text {
                 font-size: 1.1rem;
-                padding: 1.5rem;
+                padding: 1.2rem;
                 border-radius: 20px;
             }
 
@@ -936,19 +940,30 @@
             .dashboard-content h2 i {
                 font-size: 1.2rem;
             }
+
+            #game-box {
+                padding: 2rem !important;
+                min-height: 400px !important;
+            }
+
+            #view-game>div:first-child,
+            #view-flashcards>div:first-child {
+                margin-bottom: 1.5rem !important;
+                gap: 1rem !important;
+            }
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
 
             .game-title {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             .stat-value {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
 
             main {
@@ -957,16 +972,23 @@
             }
 
             .logo {
-                margin-bottom: 2rem;
+                margin-bottom: 1.5rem;
+                font-size: 1.5rem;
             }
 
             .btn {
-                padding: 0.8rem 1.2rem;
-                font-size: 0.9rem;
+                padding: 0.7rem 1.1rem;
+                font-size: 0.85rem;
             }
 
             .flashcard h2 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+
+            .flashcard-face i.fa-volume-up {
+                top: 1.5rem !important;
+                right: 1.5rem !important;
+                font-size: 1.5rem !important;
             }
         }
 
@@ -1205,8 +1227,8 @@
                 <div class="flashcard" id="active-card">
                     <div class="flashcard-face">
                         <i class="fas fa-volume-up" onclick="speakText(event)"
-                            style="position: absolute; top: 3rem; right: 3rem; font-size: 2rem; color: var(--primary); opacity: 0.6; transition: 0.3s; cursor: pointer;"></i>
-                        <h2 id="card-front-text">Yuklanmoqda...</h2>
+                            style="position: absolute; top: 3rem; right: 3rem; font-size: 2rem; color: var(--primary); opacity: 0.6; transition: 0.3s; cursor: pointer; z-index: 10;"></i>
+                        <h2 id="card-front-text" style="word-break: break-word; padding: 0 1rem;">Yuklanmoqda...</h2>
                         <p id="card-type-text"
                             style="color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 1rem; letter-spacing: 3px; margin-top: 1rem;">
                             Inglizcha so'z</p>
@@ -1593,6 +1615,19 @@
             }
 
             renderActivityChart();
+        }
+
+        function speakText(e) {
+            if (e) e.stopPropagation();
+            const text = document.getElementById('card-front-text').innerText;
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.9;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast('Xatolik', 'Brauzeringiz nutq funksiyasini qo\'llab-quvvatlamaydi', 'danger');
+            }
         }
 
         function confettiEffect() {
