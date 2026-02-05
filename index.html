@@ -1099,9 +1099,15 @@
 
     <!-- Game View -->
     <div id="view-game" class="view">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
             <h1>Game Mode</h1>
-            <div style="display: flex; gap: 1.5rem; align-items: center;">
+            <div style="display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap;">
+                <select id="game-mode-select" class="glass-card"
+                    style="margin:0; padding: 0.8rem 1.2rem; border-radius: 20px; font-weight: 700; font-size: 1rem; width: auto; height: auto; cursor: pointer; border: 1px solid var(--glass-border); color: white;">
+                    <option value="choice">Multiple Choice</option>
+                    <option value="writing">Writing Mode</option>
+                </select>
                 <div class="glass-card"
                     style="margin:0; padding: 0.8rem 1.5rem; display: flex; gap: 1rem; font-weight: 800; color: var(--warning); border: 1px solid var(--glass-border);">
                     <i class="fas fa-crown"></i> <span id="game-xp">0</span> XP
@@ -1267,8 +1273,18 @@
             theme: localStorage.getItem('pro_theme') || 'dark',
             lastActivity: localStorage.getItem('pro_last_active') || null,
             currentUnit: null,
-            mastered: JSON.parse(localStorage.getItem('pro_mastered')) || [] // Mastered word IDs
+            mastered: JSON.parse(localStorage.getItem('pro_mastered')) || [], // Mastered word IDs
+            weeklyXP: JSON.parse(localStorage.getItem('pro_weekly_xp')) || [0, 0, 0, 0, 0, 0, 0] // Mo, Tu, We, Th, Fr, Sa, Su
         };
+
+        // SRS Logic Addition: Ensure words have SRS properties
+        function initializeSRS() {
+            appState.words.forEach(w => {
+                if (w.srs === undefined) w.srs = 0; // Higher = harder/needs more review
+                if (w.errors === undefined) w.errors = 0;
+                if (w.lastShown === undefined) w.lastShown = 0;
+            });
+        }
 
         // Ultra Pro Sync: Ensure all ALL_UNITS words are in appState.words
         function syncLibrary() {
@@ -1288,21 +1304,28 @@
                         appState.words.push({
                             ...w,
                             unit: unit.id,
-                            id: Math.random().toString(36).substr(2, 9)
+                            id: Math.random().toString(36).substr(2, 9),
+                            srs: 0,
+                            errors: 0,
+                            lastShown: Date.now()
                         });
                         addedCount++;
                     } else if (!exists.unit) {
                         exists.unit = unit.id;
                         exists.id = exists.id || Math.random().toString(36).substr(2, 9);
+                        if (exists.srs === undefined) {
+                            exists.srs = 0;
+                            exists.errors = 0;
+                            exists.lastShown = Date.now();
+                        }
                     }
                 });
             });
 
-            console.log(`Library synced: ${addedCount} new words added. Total: ${appState.words.length}`);
-
             if (addedCount > 0) {
                 localStorage.setItem('pro_words', JSON.stringify(appState.words));
             }
+            initializeSRS();
         }
 
         syncLibrary();
@@ -1369,8 +1392,38 @@
             localStorage.setItem('pro_streak', appState.streak);
             localStorage.setItem('pro_theme', appState.theme);
             localStorage.setItem('pro_mastered', JSON.stringify(appState.mastered));
+            localStorage.setItem('pro_weekly_xp', JSON.stringify(appState.weeklyXP));
             localStorage.setItem('pro_last_active', new Date().toISOString());
             updateGlobalStats();
+        }
+
+        function addXP(amount) {
+            appState.xp += amount;
+
+            // Update weekly XP
+            const day = (new Date().getDay() + 6) % 7; // Convert 0-6 (Sun-Sat) to 0-6 (Mon-Sun)
+            appState.weeklyXP[day] += amount;
+
+            saveState();
+        }
+
+        function renderActivityChart() {
+            const maxXP = Math.max(...appState.weeklyXP, 100);
+            for (let i = 0; i < 7; i++) {
+                const bar = document.getElementById(`chart-d${i + 1}`);
+                if (bar) {
+                    const height = Math.max(5, (appState.weeklyXP[i] / maxXP) * 100);
+                    bar.style.height = height + '%';
+
+                    // Highlight today
+                    const today = (new Date().getDay() + 6) % 7;
+                    if (i === today) {
+                        bar.style.background = 'var(--primary)';
+                    } else {
+                        bar.style.background = 'var(--glass)';
+                    }
+                }
+            }
         }
 
         function updateGlobalStats() {
@@ -1401,6 +1454,8 @@
                 circle.querySelector('span').innerText = progress + '%';
                 document.getElementById('mastery-text').innerText = progress + '%';
             }
+
+            renderActivityChart();
         }
 
         function confettiEffect() {
@@ -1502,7 +1557,7 @@
 
             if (known) {
                 popXP(e.clientX, e.clientY, 10);
-                appState.xp += 10;
+                addXP(10);
                 if (!appState.mastered.includes(currentWord)) {
                     appState.mastered.push(currentWord);
                     showToast('Yodlandi!', `"${currentWord}" mastered listiga qo'shildi`, 'success');
@@ -1520,6 +1575,17 @@
             renderUnits();
         }
 
+        // SRS Selection Helper: Prioritize difficult or unseen words
+        function getSRSSession(wordPool, limit = 10) {
+            return [...wordPool].sort((a, b) => {
+                // Priority: Unseen (lastShown=0) > High Errors > Oldest lastShown
+                if (a.lastShown === 0) return -1;
+                if (b.lastShown === 0) return 1;
+                if (b.errors !== a.errors) return b.errors - a.errors;
+                return a.lastShown - b.lastShown;
+            }).slice(0, limit);
+        }
+
         // Game Logic
         let currentGame = null;
         let gameTimer = null;
@@ -1527,6 +1593,7 @@
 
         function startNewGame() {
             const box = document.getElementById('game-box');
+            const mode = document.getElementById('game-mode-select').value;
             document.getElementById('game-timer-container').style.display = 'block';
 
             let filteredWords = appState.words;
@@ -1545,16 +1612,28 @@
                 return;
             }
 
-            const correct = filteredWords[Math.floor(Math.random() * filteredWords.length)];
-            const options = [correct];
+            // SRS Pick: Pick a word based on difficulty
+            const session = getSRSSession(filteredWords, 10);
+            const correct = session[Math.floor(Math.random() * session.length)];
 
-            while (options.length < 4) {
-                const rand = filteredWords[Math.floor(Math.random() * filteredWords.length)];
-                if (!options.find(o => o.word === rand.word)) options.push(rand);
+            if (mode === 'writing') {
+                renderWritingGame(box, correct);
+            } else {
+                renderChoiceGame(box, correct, filteredWords);
             }
 
+            startTimer();
+            document.getElementById('game-xp').innerText = appState.xp;
+        }
+
+        function renderChoiceGame(box, correct, allWords) {
+            const options = [correct];
+            while (options.length < 4) {
+                const rand = allWords[Math.floor(Math.random() * allWords.length)];
+                if (!options.find(o => o.word === rand.word)) options.push(rand);
+            }
             options.sort(() => 0.5 - Math.random());
-            currentGame = { correct, options };
+            currentGame = { correct, options, mode: 'choice' };
 
             box.innerHTML = `
                 <div style="text-align: center;">
@@ -1569,20 +1648,49 @@
                     </div>
                 </div>
             `;
+        }
 
-            startTimer();
-            document.getElementById('game-xp').innerText = appState.xp;
+        function renderWritingGame(box, correct) {
+            currentGame = { correct, mode: 'writing' };
+            box.innerHTML = `
+                <div style="text-align: center; width: 100%;">
+                    <p style="text-transform: uppercase; letter-spacing: 4px; color: var(--text-muted); margin-bottom: 1.5rem; font-weight: 800; font-size: 0.9rem;">O'zbekchaga tarjima qiling:</p>
+                    <h2 style="font-size: 4.5rem; margin-bottom: 3rem; font-weight: 1000; color: white; text-shadow: 0 0 30px var(--primary-glow);">${correct.word}</h2>
+                    <div style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.5rem;">
+                        <input type="text" id="writing-input" 
+                               style="background: var(--glass); border: 2px solid var(--glass-border); padding: 1.5rem; border-radius: 20px; font-size: 1.5rem; color: white; text-align: center;" 
+                               placeholder="Tarjimani yozing..." autocomplete="off">
+                        <button class="btn btn-primary pro-btn" style="padding: 1.5rem; font-size: 1.2rem; border-radius: 20px;" onclick="checkWritingAnswer()">
+                            <i class="fas fa-paper-plane"></i> Tekshirish
+                        </button>
+                    </div>
+                </div>
+            `;
+            const input = document.getElementById('writing-input');
+            input.focus();
+            input.onkeyup = (e) => { if (e.key === 'Enter') checkWritingAnswer(); };
+        }
+
+        function checkWritingAnswer() {
+            const input = document.getElementById('writing-input');
+            const answer = input.value.trim().toLowerCase();
+            const correctTrans = currentGame.correct.trans.toLowerCase();
+
+            // Allow minor fuzzy matching or multiple meanings if comma present
+            const isCorrect = correctTrans.split(',').some(part => part.trim().toLowerCase() === answer);
+
+            checkGameAnswer(input, isCorrect);
         }
 
         function startTimer() {
             clearInterval(gameTimer);
-            timeLeft = 10;
+            timeLeft = 12; // Extra time for typing
             const bar = document.getElementById('game-timer-bar');
             bar.style.width = '100%';
 
             gameTimer = setInterval(() => {
                 timeLeft -= 0.1;
-                bar.style.width = (timeLeft * 10) + '%';
+                bar.style.width = (timeLeft / 1.2 * 10) + '%';
                 if (timeLeft <= 0) {
                     clearInterval(gameTimer);
                     handleTimeOut();
@@ -1591,35 +1699,58 @@
         }
 
         function handleTimeOut() {
-            showToast('Vaqt tugadi!', 'Kechikdingiz, urinib ko\'ring!', 'danger');
+            showToast('Vaqt tugadi!', 'Kechikdingiz!', 'danger');
             appState.streak = 0;
+            updateSRS(currentGame.correct, false);
             setTimeout(startNewGame, 1000);
         }
 
-        function checkGameAnswer(el, idx) {
-            clearInterval(gameTimer);
-            if (el.parentElement.classList.contains('locked')) return;
-            el.parentElement.classList.add('locked');
+        function updateSRS(wordObj, isCorrect) {
+            const word = appState.words.find(w => w.word === wordObj.word);
+            if (!word) return;
 
-            const isCorrect = currentGame.options[idx].word === currentGame.correct.word;
+            word.lastShown = Date.now();
+            if (isCorrect) {
+                word.srs = Math.max(0, (word.srs || 0) - 1);
+            } else {
+                word.srs = (word.srs || 0) + 2;
+                word.errors = (word.errors || 0) + 1;
+            }
+            saveState();
+        }
+
+        function checkGameAnswer(el, inputIsCorrect) {
+            clearInterval(gameTimer);
+            const isChoiceMode = currentGame.mode === 'choice';
+
+            if (isChoiceMode && el.parentElement.classList.contains('locked')) return;
+            if (isChoiceMode) el.parentElement.classList.add('locked');
+
+            const isCorrect = isChoiceMode ? (currentGame.options[inputIsCorrect].word === currentGame.correct.word) : inputIsCorrect;
 
             if (isCorrect) {
-                el.classList.add('correct');
+                if (isChoiceMode) el.classList.add('correct');
+                else el.style.borderColor = 'var(--accent)';
+
                 appState.streak++;
-                const bonus = 15 + Math.floor(timeLeft * 2);
-                appState.xp += bonus;
-                popXP(el.offsetLeft + 100, el.offsetTop, bonus);
-                showToast('To\'g\'ri!', `+${bonus} XP (Bonus: ${Math.floor(timeLeft)}s)`);
+                const bonus = 20 + Math.floor(timeLeft * 3);
+                addXP(bonus);
+                popXP(window.innerWidth / 2, window.innerHeight / 2, `+${bonus} XP`);
+                showToast('To\'g\'ri!', `Ajoyib! (Bonus: ${Math.floor(timeLeft)}s)`, 'success');
+                updateSRS(currentGame.correct, true);
             } else {
-                el.classList.add('wrong');
+                if (isChoiceMode) el.classList.add('wrong');
+                else el.style.borderColor = 'var(--danger)';
+
                 appState.streak = 0;
                 showToast('Xato', `To'g'ri javob: ${currentGame.correct.trans}`, 'danger');
+                updateSRS(currentGame.correct, false);
             }
 
             setTimeout(() => {
                 startNewGame();
                 saveState();
-            }, 1200);
+            }, 1500);
         }
 
         // Word Management
