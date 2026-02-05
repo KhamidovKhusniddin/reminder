@@ -1106,7 +1106,8 @@
                     style="margin:0; padding: 0.8rem 1.5rem; display: flex; gap: 1rem; font-weight: 800; color: var(--warning); border: 1px solid var(--glass-border);">
                     <i class="fas fa-crown"></i> <span id="game-xp">0</span> XP
                 </div>
-                <button class="btn btn-secondary" onclick="appState.currentUnit=null; initApp(); showView('dashboard')">
+                <button class="btn btn-secondary"
+                    onclick="clearInterval(gameTimer); appState.currentUnit=null; initApp(); showView('dashboard')">
                     <i class="fas fa-times"></i> To'xtatish
                 </button>
             </div>
@@ -1115,7 +1116,13 @@
         <div class="flashcard-view-container">
             <div class="glass-card" id="game-box"
                 style="width: 100%; max-width: 800px; min-height: 500px; padding: 4rem; display: flex; flex-direction: column; justify-content: center;">
-                <!-- Game content -->
+                <div style="text-align: center; color: var(--text-muted);">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Yuklanmoqda...</p>
+                </div>
+            </div>
+            <div class="timer-container" id="game-timer-container">
+                <div class="timer-bar" id="game-timer-bar"></div>
             </div>
         </div>
     </div>
@@ -1265,23 +1272,36 @@
 
         // Ultra Pro Sync: Ensure all ALL_UNITS words are in appState.words
         function syncLibrary() {
-            if (typeof ALL_UNITS === 'undefined') return;
+            if (typeof ALL_UNITS === 'undefined') {
+                console.error('ALL_UNITS is undefined! Check words_data.js');
+                return;
+            }
+
+            console.log('Starting library sync...');
+            console.log('ALL_UNITS count:', ALL_UNITS.length);
+
             let addedCount = 0;
             ALL_UNITS.forEach(unit => {
                 unit.words.forEach(w => {
                     const exists = appState.words.find(sw => sw.word === w.word);
                     if (!exists) {
-                        appState.words.push({ ...w, unit: unit.id, id: Math.random().toString(36).substr(2, 9) });
+                        appState.words.push({
+                            ...w,
+                            unit: unit.id,
+                            id: Math.random().toString(36).substr(2, 9)
+                        });
                         addedCount++;
                     } else if (!exists.unit) {
-                        exists.unit = unit.id; // Update unit if missing
+                        exists.unit = unit.id;
                         exists.id = exists.id || Math.random().toString(36).substr(2, 9);
                     }
                 });
             });
+
+            console.log(`Library synced: ${addedCount} new words added. Total: ${appState.words.length}`);
+
             if (addedCount > 0) {
-                saveState();
-                console.log(`Library synced: ${addedCount} words added.`);
+                localStorage.setItem('pro_words', JSON.stringify(appState.words));
             }
         }
 
