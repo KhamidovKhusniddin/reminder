@@ -266,6 +266,47 @@ header p {
   font-weight: 800;
 }
 
+/* --- Level Up Modal --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.level-up-card {
+  background: linear-gradient(145deg, #1e1b4b, #0c0a20);
+  padding: 50px 40px;
+  border-radius: 40px;
+  text-align: center;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px var(--accent-glow);
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  max-width: 90%;
+  width: 360px;
+}
+
+.modal-overlay.active .level-up-card {
+  transform: scale(1);
+}
+
 /* --- Floating Navbar --- */
 .navbar {
   position: fixed;

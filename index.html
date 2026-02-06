@@ -32,7 +32,7 @@
         </section>
 
         <!-- Luxury HUD -->
-        <div class="user-hud fade-up">
+        <div class="user-hud fade-up" id="global-hud">
             <div class="hud-item">
                 <div class="hud-level-circle" id="user-level-circle" data-level="1" style="--progress: 0%"></div>
                 <div style="display:flex; flex-direction:column;">
@@ -48,7 +48,7 @@
         </div>
 
         <header class="fade-up" style="animation-delay: 0.1s">
-            <h1>MEng APro</h1>
+            <h1 style="letter-spacing: 2px;">REMINDER</h1>
             <p>Intelligence in Language</p>
         </header>
 
@@ -58,6 +58,18 @@
                 <!-- Unit Cards will be injected here -->
             </div>
 
+        </section>
+
+        <!-- Screen: Unit Parts (Sub-levels) -->
+        <section id="screen-parts" class="hidden">
+            <button class="back-btn" onclick="showScreen('units')">← BACK TO UNITS</button>
+            <div class="unit-card" style="margin-bottom:24px; text-align:center; display:block; cursor:default;">
+                <h2 id="parts-unit-name" style="font-size:1.5rem; font-weight:800; margin-bottom:8px;">Unit Name</h2>
+                <p style="color:var(--text-muted); font-size:0.9rem;">Select a part to practice</p>
+            </div>
+            <div class="unit-grid" id="parts-list">
+                <!-- Parts injected here -->
+            </div>
         </section>
 
         <!-- Screen: Mode Selection (Inside a specific unit) -->
@@ -153,7 +165,7 @@
                 </div>
 
                 <h2 id="game-uzbek"
-                    style="font-size:3.5rem; font-weight:900; margin-bottom:40px; text-shadow:0 10px 30px rgba(0,0,0,0.5); z-index:2; line-height:1.1;">
+                    style="font-size:2.4rem; font-weight:900; margin-bottom:40px; text-shadow:0 10px 30px rgba(0,0,0,0.5); z-index:2; line-height:1.2; word-break: break-word;">
                     Word</h2>
 
                 <!-- Audio Button -->

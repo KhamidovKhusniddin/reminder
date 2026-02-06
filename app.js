@@ -102,14 +102,38 @@ function spawnXP(amount) {
 }
 
 // --- Navigation ---
-const screens = ['onboarding', 'units', 'modes', 'flashcard', 'game', 'test', 'results', 'manage', 'ranks', 'settings'];
+const screens = ['onboarding', 'units', 'modes', 'flashcard', 'game', 'test', 'results', 'manage', 'ranks', 'settings', 'parts'];
 function showScreen(target) {
+    // Hide all screens
     screens.forEach(s => {
         const el = document.getElementById(`screen-${s}`);
         if (el) el.classList.add('hidden');
     });
+
+    // Show target
     const targetEl = document.getElementById(`screen-${target}`);
     if (targetEl) targetEl.classList.remove('hidden');
+
+    // Manage Global UI (Header, Navbar, Global HUD)
+    // Only show these on "Main Dashboard" screens
+    const mainScreens = ['units', 'manage', 'ranks', 'settings'];
+    const showGlobal = mainScreens.includes(target);
+
+    const header = document.querySelector('header');
+    const globalHud = document.getElementById('global-hud');
+    const navbar = document.querySelector('.navbar');
+
+    if (showGlobal) {
+        if (header) header.classList.remove('hidden');
+        if (globalHud) globalHud.classList.remove('hidden');
+        if (navbar) navbar.classList.remove('hidden');
+    } else {
+        if (header) header.classList.add('hidden');
+        if (globalHud) globalHud.classList.add('hidden');
+        if (navbar) navbar.classList.add('hidden');
+    }
+
+    updateNavActive(document.querySelector(`.nav-item[onclick*="'${target}'"]`) || document.getElementById('nav-home'));
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -151,22 +175,88 @@ function renderUnits() {
         const card = document.createElement('div');
         card.className = 'unit-card fade-up';
         card.style.animationDelay = `${i * 0.08}s`;
+        // Check Mastery
+        let badge = '';
+        if (unit.words.length > 30) {
+            // Check parts mastery
+            const chunkSize = 25;
+            const partsCount = Math.ceil(unit.words.length / chunkSize);
+            let masteredCount = 0;
+            for (let p = 1; p <= partsCount; p++) {
+                if (stats.masteredUnits[`${unit.name} (Part ${p})`]) masteredCount++;
+            }
+            if (masteredCount === partsCount) badge = '<span class="mastered-badge">✅</span>';
+            else if (masteredCount > 0) badge = `<span class="mastered-badge" style="font-size:0.7rem; color:var(--accent);">${masteredCount}/${partsCount}</span>`;
+        } else {
+            if (stats.masteredUnits[unit.name]) badge = '<span class="mastered-badge">✅</span>';
+        }
+
         card.innerHTML = `
             <div class="unit-info">
                 <span class="meta">${unit.isCustom ? 'User Data' : 'OUP Source'} • ${unit.words.length} Words</span>
-                <span class="name">${unit.name} ${stats.masteredUnits[unit.name] ? '<span class="mastered-badge">✅</span>' : ''}</span>
+                <span class="name">${unit.name} ${badge}</span>
             </div>
             <div class="unit-arrow">→</div>
         `;
         card.onclick = () => {
-            currentUnitWords = [...unit.words];
-            currentUnitName = unit.name;
-            document.getElementById('selected-unit-name').innerText = unit.name;
-            document.getElementById('selected-unit-count').innerText = `${unit.words.length} Vocabulary Items`;
-            showScreen('modes');
+            // Split logic
+            if (unit.words.length > 30) {
+                renderParts(unit);
+                showScreen('parts');
+            } else {
+                currentUnitWords = [...unit.words];
+                currentUnitName = unit.name;
+                document.getElementById('selected-unit-name').innerText = unit.name;
+                document.getElementById('selected-unit-count').innerText = `${unit.words.length} Vocabulary Items`;
+                showScreen('modes');
+            }
         };
         list.appendChild(card);
     });
+}
+
+function renderParts(unit) {
+    const list = document.getElementById('parts-list');
+    document.getElementById('parts-unit-name').innerText = unit.name;
+    list.innerHTML = '';
+
+    // Chunk size 25
+    const chunkSize = 25;
+    const partsCount = Math.ceil(unit.words.length / chunkSize);
+
+    for (let i = 0; i < partsCount; i++) {
+        const start = i * chunkSize;
+        const end = Math.min(start + chunkSize, unit.words.length);
+        const partWords = unit.words.slice(start, end);
+
+        const partName = `${unit.name} (Part ${i + 1})`;
+
+        const card = document.createElement('div');
+        card.className = 'unit-card fade-up';
+        card.style.animationDelay = `${i * 0.1}s`;
+        card.innerHTML = `
+            <div class="unit-info">
+                <span class="meta">${start + 1} - ${end}</span>
+                <span class="name">Part ${i + 1} ${stats.masteredUnits[partName] ? '<span class="mastered-badge">✅</span>' : ''}</span>
+            </div>
+            <div class="unit-arrow">→</div>
+        `;
+
+        card.onclick = () => {
+            currentUnitWords = [...partWords];
+            currentUnitName = partName;
+            document.getElementById('selected-unit-name').innerText = currentUnitName;
+            document.getElementById('selected-unit-count').innerText = `${partWords.length} Words`;
+
+            // Adjust back button on modes screen to go back to parts
+            const backBtn = document.getElementById('back-to-units');
+            backBtn.innerText = "← BACK TO PARTS";
+            backBtn.onclick = () => showScreen('parts');
+
+            showScreen('modes');
+        };
+        list.appendChild(card);
+    }
 }
 
 // --- Mode Logic ---
