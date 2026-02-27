@@ -513,3 +513,21 @@ header p {
   color: rgba(255, 255, 255, 0.2);
   font-weight: 500;
 }
+
+.section-header {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 3px solid var(--accent);
+  opacity: 0;
+  animation: fadeUp 0.8s var(--spring-easing) forwards;
+}
+
+.unit-grid .section-header:first-child {
+  margin-top: 0;
+}

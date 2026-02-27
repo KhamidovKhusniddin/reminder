@@ -260,12 +260,37 @@ function parseWords() {
 }
 
 // --- UI Components ---
+const SECTION_TRIGGERS = {
+    'Unit: Topic Vocabulary': 'VOCABULARY & TOPICS',
+    'Unit: PHRASAL VERBS': 'LANGUAGE PATTERNS',
+    'Unit: PREPOSITIONAL PHRASES': 'LANGUAGE PATTERNS',
+    'Unit: WORD FORMATION': 'GRAMMAR & FORMATION',
+    'Unit: WORD PATTERNS - ADJECTIVES': 'WORD PATTERNS',
+    'Unit: WORD PATTERNS - VERBS': 'WORD PATTERNS',
+    'Unit: WORD PATTERNS - NOUNS': 'WORD PATTERNS'
+};
+
 function renderUnits() {
     const list = document.getElementById('unit-list');
     if (!list) return;
     list.innerHTML = '';
 
+    let lastSection = "";
+
     units.forEach((unit, i) => {
+        // Section Logic
+        if (SECTION_TRIGGERS[unit.name]) {
+            const sectionName = SECTION_TRIGGERS[unit.name];
+            if (sectionName !== lastSection) {
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                header.innerText = sectionName;
+                header.style.animationDelay = `${i * 0.05}s`;
+                list.appendChild(header);
+                lastSection = sectionName;
+            }
+        }
+
         const card = document.createElement('div');
         card.className = 'unit-card fade-up';
         card.style.animationDelay = `${i * 0.08}s`;

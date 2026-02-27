@@ -735,4 +735,102 @@ Unit 9: Materiallar va Mashinalar
     Welcome (v) – xush kelibsiz demoq / kutib olmoq
     Wheels (n) – g'ildiraklar
     Wood (n) – yog'och
+
+Unit: Topic Vocabulary
+    Achieve (v) – erishmoq
+    Brain (n) – miya
+    Clever (adj) – aqlli
+    Concentrate (v) – fikrni jamlamoq
+    Consider (v) – deb hisoblamoq
+    Course (n) – kurs
+    Degree (n) – daraja
+    Experience (n, v) – tajriba; boshdan kechirmoq
+    Expert (n) – ekspert / o'z ishining ustasi
+    Fail (v) – muvaffaqiyatsizlikka uchramoq
+    Guess (n, v) – taxmin; taxmin qilmoq
+    Hesitate (v) – ikkilanmoq
+    Instruction (n) – qo'llanma
+    Make progress (v) – yuksalmoq / o'smoq
+    Make sure (v) – ishonch hosil qilmoq
+    Mark (n, v) – baho; baholamoq
+    Mental (adj) – aqliy
+    Pass (v) – imtihondan o'tmoq
+    Qualification (n) – tajriba / malaka
+    Remind (v) – eslatmoq
+    Report (n, v) – hisobot; hisob bermoq
+    Revise (v) – qaytadan ko'rib chiqmoq
+    Search (n, v) – qidiruv; qidirmoq
+    Skill (n) – mahorat / mahorat
+    Smart (adj) – aqlli
+    Subject (n) – fan
+    Take an exam (v) – imtihon topshirmoq
+    Talented (adj) – talantli
+    Term (n) – termin
+    Wonder (v) – hayratlanmoq
+
+Unit: PHRASAL VERBS
+    Cross out (phr v) – biror yozilgan yozuvni o'chirmoq
+    Look up (phr v) – qidirmoq (lug'atdan)
+    Point out (phr v) – ta'kidlamoq
+    Read out (phr v) – ovoz chiqarib o'qimoq
+    Rip up (phr v) – yirtmoq
+    Rub out (phr v) – o'chirmoq (o'chirg'ich bilan)
+    Turn over (phr v) – o'girmoq
+    Write down (phr v) – yozmoq
+
+Unit: PREPOSITIONAL PHRASES
+    By heart (phr) – yoddan / yurakdan
+    For instance (phr) – masalan
+    In conclusion (phr) – xulosada
+    In fact (phr) – aslida
+    In favour (of) (phr) – qo'llamoq
+    In general (phr) – umuman olganda
+
+Unit: WORD FORMATION
+    Begin (v) – boshlamoq
+    Began (v-past) – boshladi (past tense)
+    Begun (v-pp) – boshlagan (past participle)
+    Beginner (n) – boshlovchi
+    Beginning (n) – boshlanish
+    Brave (adj) – jasur
+    Bravery (n) – jasurlik
+    Correct (adj) – to'g'ri
+    Correction (n) – tuzatish / to'g'rilash
+    Incorrect (adj) – noto'g'ri
+    Divide (v) – bo'lmoq / taqsimlamoq
+    Division (n) – taqsimlash
+    Educate (v) – ta'lim bermoq
+    Education (n) – ta'lim
+    Instruct (v) – ko'rsatma bermoq
+    Instruction (n) – ko'rsatma
+    Instructor (n) – instruktor
+    Memory (n) – xotira
+    Memorise (v) – yodlamoq
+    Memorial (n) – yodgorlik
+    Refer (v) – ma'lumot bermoq / havola qilmoq
+    Reference (n) – ma'lumotnoma
+    Silent (adj) – tinch / sokin
+    Silence (n) – tinchlik / sukunat
+    Silently (adv) – tinch holatda / indamay
+    Simple (adj) – sodda / oddiy
+    Simplify (v) – soddalashtirmoq
+    Simplicity (n) – soddalik
+
+Unit: WORD PATTERNS - ADJECTIVES
+    Capable of (adj) – ...ga qobiliyatli
+    Talented at (adj) – ...da talantli
+
+Unit: WORD PATTERNS - VERBS
+    Cheat at/in (v) – ...da aldamoq
+    Confuse sth with (v) – ... bilan chalkashtirmoq
+    Continue with (v) – ... bilan davom etmoq
+    Cope with (v) – uddalamoq
+    Help (sb) with (v) – ... bilan yordam bermoq
+    Know about (v) – ... haqida bilmoq
+    Learn about (v) – ... haqida o'rganmoq
+    Succeed in (v) – ...da muvaffaqiyat qozonmoq
+
+Unit: WORD PATTERNS - NOUNS
+    An opinion about/of (n) – ... haqida fikr
+    A question about (n) – ... haqida savol
 `;
